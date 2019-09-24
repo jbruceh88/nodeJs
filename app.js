@@ -1,22 +1,26 @@
 const express = require('express');
+const cookieSession = require('cookie-session');
+
+const router = express.Router();
+const toController = require('./controllers/toDoController.js');
 const bodyParser = require('body-parser');
-const session = require('cookie-session');
-const routes = require('./routes');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const port = 3000;
-
-
 const app = express();
-/* Session Set Up */
-app.use(session({secret: 'todotopsecret'}))
 
-app.use(function(req,res,next){
-	if(typeof(req.session.todolist == 'undefinded')){
-		req.session.todolist = [];
-	}
-	next();
-})
-.use('/', routes());
+app.use(
+	cookieSession(
+		{
+			cookieName: 'session',
+			secret: 'todotopsecret',
+			httpOnly: true,
+            ephemeral: true,
+            duration: 30 * 60 * 1000,
+            activeDuration: 5 * 60 * 1000
+		}
+		)
+	)
 
+const routes = require('./routes')(app,urlencodedParser);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
