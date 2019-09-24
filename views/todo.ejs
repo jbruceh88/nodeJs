@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+	<html>
+		<body>
+			<ul>
+				<% todolist.forEach(function (todo, index){ %>
+			 		<li><p><% todo%></p></li>
+				<% }); %>
+			</ul>
+
+
+			<form action="/todo/add" method="post">
+				<input type="text" name="newtodo" id="newtodo" placeholder="add new todo" />
+				<input type="submit" />
+			</form>
+		</body>
+	</html>
